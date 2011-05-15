@@ -6,3 +6,6 @@ target/
 gen/
 *.iml
 .idea
+test-result/
+tmp/
+modules/
