@@ -1,7 +1,28 @@
-# you describe your data using the YAML notation here
-# and then load them using Fixtures.load("data.yml")
+# TEST DATA
 
-# User(bob):
-#   email: bob@gmail.com
-#   password: secret
-#   fullname: Bob
+products.Family(familyOne):
+  label: Family One
+  value: family_one
+  order: 1
+  productType: tea
+  productTypeLabel: Thé
+
+products.Tva(tvaOne):
+  label: TVA 16.5
+  value: 16.5
+
+products.Tea(teaone):
+  name: Tea One
+  ident: tea_one
+  code: AAA
+  description:  >
+                This is the first test
+
+  priceHT: 15
+  stock: 10
+  weight: 100
+  reduction: true
+  desactivated: false
+  hasPicture: true
+  family: familyOne
+  tva: tvaOne
