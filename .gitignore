@@ -9,3 +9,4 @@ gen/
 test-result/
 tmp/
 modules/
+out/

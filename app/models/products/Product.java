@@ -62,4 +62,24 @@ public class Product extends Model {
     @Required
     @ManyToOne
     public Tva tva;
+
+    public Product() {
+
+    }
+
+    public Product(Product product) {
+
+        name = product.name;
+        ident = product.ident;
+        code = product.code;
+        description = product.description;
+        priceHT = product.priceHT;
+        stock = product.stock;
+        weight = product.weight;
+        reduction = product.reduction;
+        desactivated = product.desactivated;
+        hasPicture = product.hasPicture;
+        family = product.family;
+        tva = product.tva;
+    }
 }

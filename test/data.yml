@@ -1,20 +1,55 @@
 # TEST DATA
 
-products.Family(familyOne):
-  label: Family One
-  value: family_one
+# SOCIAL TYPE
+users.SocialType(socialTypeMr):
+  name: mr
+users.SocialType(socialTypeMme):
+  name: mme
+users.SocialType(socialTypeMlle):
+  name: mlle
+
+
+# PROFILE
+users.Profile(profileClient):
+  name: client
+users.Profile(profileLoyal):
+  name: loyal
+users.Profile(profileAdmin):
+  name: admin
+
+# FAMILY
+products.Family(familyTest):
+  label: Family Test
+  value: family_test
   order: 1
   productType: tea
   productTypeLabel: Thé
 
-products.Tva(tvaOne):
-  label: TVA 16.5
+
+# TVA
+products.Tva(tvaTest):
+  label: TVA Test
   value: 16.5
 
-products.Tea(teaone):
-  name: Tea One
-  ident: tea_one
-  code: AAA
+
+# PRODUCTS
+
+# TEA
+products.Family(teaFamilyTest):
+  label: Family Tea
+  value: family_tea
+  order: 1
+  productType: tea
+  productTypeLabel: Thé
+
+products.Tva(teaTvaTest):
+  label: TVA Tea
+  value: 16.5
+
+products.Tea(teaTest):
+  name: Tea Test
+  ident: tea_test
+  code: TEST
   description:  >
                 This is the first test
 
@@ -24,5 +59,5 @@ products.Tea(teaone):
   reduction: true
   desactivated: false
   hasPicture: true
-  family: familyOne
-  tva: tvaOne
+  family: teaFamilyTest
+  tva: teaTvaTest
