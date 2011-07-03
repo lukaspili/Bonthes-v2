@@ -1,32 +1,37 @@
-import controllers.Products;
 import models.products.Product;
+import models.products.Tea;
 import org.junit.*;
-import java.util.*;
-import play.test.*;
-import models.*;
 
 public class TeaTest extends BaseUnitTest {
+
+    private long count = 1;
 
     @Test
     public void crud() {
 
         // add
-        assertEquals(1, Product.count());
+        assertEquals(count, Tea.count());
 
         // read
-        Product product = Product.find("code = ?", "AAA").first();
-        assertEquals("AAA", product.code);
+        Tea entity = Tea.find("code = ?", "TEST").first();
+        assertEquals("TEST", entity.code);
+
+        // family
+        assertEquals("family_tea", entity.family.value);
+
+        // tva
+        assertEquals("TVA Tea", entity.tva.label);
 
         // update
-        product.code = "BBB";
-        product.save();
+        entity.code = "TEST_EDIT";
+        entity.save();
 
-        product = Product.find("code = ?", "BBB").first();
-        assertEquals("BBB", product.code);
+        entity = Tea.find("code = ?", "TEST_EDIT").first();
+        assertEquals("TEST_EDIT", entity.code);
 
         // delete
-        product.delete();
-        assertEquals(0, Product.count());
+        entity.delete();
+        assertEquals(--count, Product.count());
     }
 
 }

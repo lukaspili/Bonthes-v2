@@ -1,4 +1,9 @@
-# You can specialize this file for each language.
-# For example, for French create a messages.fr file
-#
+# profile
+profile.client = Client
+profile.loyal = Client fidèle
+profile.admin = Administrateur
 
+# social type
+socialType.mme = Mme
+socialType.mlle = Mlle
+socialType.mr = M.
