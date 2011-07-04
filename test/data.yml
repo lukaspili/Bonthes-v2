@@ -17,6 +17,25 @@ users.Profile(profileLoyal):
 users.Profile(profileAdmin):
   name: admin
 
+
+# USER
+#users.User(userLukasz):
+#  firstName: Lukasz
+#  lastName:
+#        user.firstName = "Lukasz";
+#        user.lastName = "Piliszczuk";
+#        user.email = "lukasz.pili@gmail.com";
+#        user.street = "77 rue notre dame des champs";
+#        user.streetComplement = "Complement street";
+#        user.city = "Paris";
+#        user.postalCode = "75006";
+#        user.country = "FR";
+#        user.fax = "fax number";
+#        user.phone = "phone number";
+#        user.newsletter = true;
+#
+#        user.socialType = SocialType.find("byName", SocialType.MR).first();
+
 # FAMILY
 products.Family(familyTest):
   label: Family Test

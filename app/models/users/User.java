@@ -4,7 +4,6 @@ package models.users;
 import org.hibernate.validator.constraints.Email;
 import org.joda.time.LocalDateTime;
 import play.db.jpa.Model;
-import utils.UserUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -32,7 +31,7 @@ public class User extends Model {
     public String email;
 
     @NotNull
-    public String passwordHash;
+    public String password;
 
     @NotNull
     public String firstName;
@@ -74,6 +73,6 @@ public class User extends Model {
 
     @PostPersist
     public void generateClientIdentifier() {
-        clientIdentifier = UserUtils.getClientIdentifierForUser(this);
+        clientIdentifier = "CI" + (id * 100) + registerDate.monthOfYear().get() + registerDate.year().get();
     }
 }

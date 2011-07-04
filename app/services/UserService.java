@@ -2,7 +2,6 @@ package services;
 
 import exceptions.CoreException;
 import models.users.Profile;
-import models.users.SocialType;
 import models.users.User;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.joda.time.LocalDateTime;
@@ -14,36 +13,39 @@ import utils.LocaleUtils;
  */
 public class UserService {
 
-    public static User register(String firstName, String lastName, String email, String password,
-                                String street, String streetComplement, String city,
-                                String postalCode, String country,
-                                String fax, String phone, Boolean newsletter, SocialType socialType) {
+    public static User get(Long id) {
+
+        User user = User.findById(id);
+
+        if (null == user) {
+            throw new CoreException("User not found with id : " + id);
+        }
+
+        return user;
+    }
+
+    public static User getByEmail(String email) {
+        try {
+            User user = User.find("byEmail", email).first();
+            if (null == user) {
+                throw new RuntimeException();
+            }
+
+            return user;
+
+        } catch (Exception e) {
+            throw new CoreException("user not found with email : " + email, e);
+        }
+    }
+
+    public static User register(User wrapper) {
 
         User user = new User();
 
-        // mapping from controller
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.email = email;
-        user.street = street;
-        user.streetComplement = streetComplement;
-        user.city = city;
-        user.postalCode = postalCode;
-        user.fax = fax;
-        user.phone = phone;
-        user.newsletter = newsletter;
-        user.socialType = socialType;
-
-        // check country validity
-        user.country = LocaleUtils.getValidCountryCode(country);
-
-        if (null == user.country || user.country.isEmpty()) {
-            throw new CoreException("locale is invalid for country : " + country);
-        }
+        basicMapping(user, wrapper);
 
         // password hash
-        StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
-        user.passwordHash = encryptor.encryptPassword(password);
+        user.password = getPasswordHash(wrapper.password);
 
         // profile
         try {
@@ -72,7 +74,7 @@ public class UserService {
         User user = null;
 
         try {
-            user = User.find("byEmail and banned", email, false).first();
+            user = User.find("email=? and banned=?", email, false).first();
         } catch (Exception e) {
             throw new CoreException("login exception", e);
         }
@@ -81,19 +83,66 @@ public class UserService {
             throw new CoreException("user not found with email : " + email);
         }
 
-        Logger.info("pass = " + user.passwordHash);
-
-        StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
-
-        if (!encryptor.checkPassword(password, user.passwordHash)) {
+        if (!new StrongPasswordEncryptor().checkPassword(password, user.password)) {
             throw new CoreException("user exists but invalid password with email : " + email);
         }
 
+        // update last login date
+        user.lastLoginDate = new LocalDateTime();
+        user.save();
+
         return user;
+    }
+
+    private static void update(User user, User wrapper) {
+        basicMapping(user, wrapper);
+        user.save();
+    }
+
+    public static void userUpdate(User wrapper) {
+        User user = get(wrapper.id);
+        Logger.info("user pass from service : " + user.password);
+
+        if (null != wrapper.password) {
+            user.password = getPasswordHash(wrapper.password);
+        }
+
+        update(user, wrapper);
+    }
+
+    public static void adminUpdate(User wrapper) {
+        User user = get(wrapper.id);
+        user.profile = wrapper.profile;
+        update(user, wrapper);
     }
 
     public static void ban(User user) {
         user.banned = true;
         user.save();
+    }
+
+    private static void basicMapping(User user, User wrapper) {
+        user.firstName = wrapper.firstName;
+        user.lastName = wrapper.lastName;
+        user.email = wrapper.email;
+        user.street = wrapper.street;
+        user.streetComplement = wrapper.streetComplement;
+        user.city = wrapper.city;
+        user.postalCode = wrapper.postalCode;
+        user.country = LocaleUtils.getValidCountryCode(wrapper.country);
+        user.fax = wrapper.fax;
+        user.phone = wrapper.phone;
+        user.newsletter = wrapper.newsletter;
+        user.socialType = wrapper.socialType;
+    }
+
+    /**
+     * Externalized to make easy changes of hash algo
+     *
+     * @param password
+     * @return hashed password
+     */
+    private static String getPasswordHash(String password) {
+        return new StrongPasswordEncryptor().encryptPassword(password);
     }
 }
